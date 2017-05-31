@@ -1,0 +1,2 @@
+# Szoplista
+In Kotlin
