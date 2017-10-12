@@ -8,9 +8,14 @@ import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutCompat
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.LinearLayout
+import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -34,6 +39,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val navigationView = findViewById(R.id.nav_view) as NavigationView
         navigationView.setNavigationItemSelectedListener(this)
+
+        shopping_list.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
+
+        val item1 = Item("First", true)
+        val item2 = Item("Second", true)
+        val item3 = Item("Third")
+        val item4 = Item("Fourth", true)
+        val item5 = Item("Fifth")
+
+        val items = listOf(item1, item2, item3, item4, item5)
+
+        shopping_list.adapter = ShoppingListAdapter(items) {
+        }
     }
 
     override fun onBackPressed() {
