@@ -2,20 +2,19 @@ package com.kotomoto.szoplista
 
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
-import android.support.design.widget.Snackbar
 import android.support.design.widget.NavigationView
+import android.support.design.widget.Snackbar
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.content_main.*
+import org.jetbrains.anko.db.insert
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -42,17 +41,35 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         shopping_list.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
 
-        val item1 = Item("First", true)
-        val item2 = Item("Second", true)
-        val item3 = Item("Third")
-        val item4 = Item("Fourth", true)
-        val item5 = Item("Fifth")
+        val item1 = Item(1, "First", true)
+        val item2 = Item(2, "Second", true)
+        val item3 = Item(3, "Third")
+        val item4 = Item(4, "Fourth", true)
+        val item5 = Item(5, "Fifth")
 
         val items = listOf(item1, item2, item3, item4, item5)
+
+        items.forEach {
+            database.use {
+                insert(SqlHelper.TABLE_NAME,
+                        SqlHelper.COLUMN_NAME_ID to it.id,
+                        SqlHelper.COLUMN_NAME_NAME to it.name,
+                        SqlHelper.COLUMN_NAME_CHECKED to mapCheckedStateToInt(it.checked)
+                )
+            }
+        }
+
+        // todo select items from db
 
         shopping_list.adapter = ShoppingListAdapter(items) {
         }
     }
+
+    private fun mapCheckedStateToInt(checked: Boolean): Int =
+            when (checked) {
+                true -> 1
+                false -> 0
+            }
 
     override fun onBackPressed() {
         val drawer = findViewById(R.id.drawer_layout) as DrawerLayout

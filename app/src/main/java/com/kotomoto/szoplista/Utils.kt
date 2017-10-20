@@ -15,3 +15,6 @@ fun ViewGroup.inflate(layoutRes: Int): View =
 fun Context.toast(message: CharSequence) = Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 
 fun Resources.getDrawable(drawableId: Int) = ResourcesCompat.getDrawable(this, drawableId, null)
+
+val Context.database: SqlHelper
+    get() = SqlHelper.getInstance(applicationContext)
